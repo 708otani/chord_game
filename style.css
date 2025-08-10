@@ -1,0 +1,83 @@
+    button {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      font-size: 12px;
+    }
+
+    #start-button {
+      border-radius: 10%;
+      width: 300px;
+      height: 24px;
+      font-size: 16px;
+    }
+
+    #red-button {
+      background-color: red;
+      color: white;
+    }
+
+    #yellow-button {
+      background-color: yellow;
+      color: black;
+    }
+
+    #blue-button {
+      background-color: blue;
+      color: white;
+    }
+
+    #black-button {
+      background-color: black;
+      color: white;
+    }
+
+    #green-button {
+      background-color: green;
+      color: white;
+    }
+
+    #orange-button {
+      background-color: #ff9900;
+      color: white;
+    }
+
+    #purple-button {
+      background-color: #990099;
+      color: white;
+    }
+
+    #pink-button {
+      background-color: #ff6699;
+      color: white;
+    }
+
+    #brown-button {
+      background-color: #990000;
+      color: white;
+    }
+
+    #light-green-button {
+      background-color: lime;
+      color: black;
+    }
+
+    #light-orange-button {
+      background-color: #ffcccc;
+      color: black;
+    }
+
+    #light-purple-button {
+      background-color: #cc66cc;
+      color: black;
+    }
+
+    #gray-button {
+      background-color: #999999;
+      color: black;
+    }
+
+    #light-blue-button {
+      background-color: #00ccff;
+      color: black;
+    }
