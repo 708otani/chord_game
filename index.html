@@ -1,8 +1,10 @@
 <html>
-<head>
-  <title>おとあてゲーム</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>おとあてゲーム</title>
+  </head>
 <body>
   <h1>おとあてゲーム</h1>
   <p>おとをきいて、ボタンをおしてね</p>
@@ -44,6 +46,7 @@
     <button id="gray-button">ベーレファ</button>
     <button id="light-blue-button">エスソベー</button>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
   <script>
     const context = new AudioContext();
     const masterGain = context.createGain();
@@ -68,6 +71,20 @@
     notes.C5 = 440.0 * Math.pow(2, 3 / 12);
     notes.D5 = 440.0 * Math.pow(2, 5 / 12);
     notes.E5 = 440.0 * Math.pow(2, 7 / 12);
+
+    const piano = new Tone.Sampler({
+      urls: {
+        "A3": "A3.mp3",
+        "C4": "C4.mp3",
+        "D#4": "Ds4.mp3",
+        "F#4": "Fs4.mp3",
+        "A4": "A4.mp3",
+        "C5": "C5.mp3",
+        "D#5": "Ds5.mp3"
+      },
+      baseUrl: "https://tonejs.github.io/audio/salamander/"
+    }).toDestination();
+    
     const buttons = [
       "red-button",
       "yellow-button",
@@ -94,11 +111,11 @@
       ['F4', 'A4', 'C5'],
       ['G4', 'B4', 'D5'],
       ['G4', 'C5', 'E5'],
-      ['A3', 'Cis4', 'E4'],
-      ['D4', 'Fis4', 'A4'],
-      ['E4', 'Gis4', 'B4'],
-      ['Be3', 'D4', 'F4'],
-      ['Es4', 'G4', 'Be4']
+      ['A3', 'C#4', 'E4'],
+      ['D4', 'F#4', 'A4'],
+      ['E4', 'G#4', 'B4'],
+      ['A#3', 'D4', 'F4'],
+      ['D#4', 'G4', 'A#4']
     ];
     let currentChordIndex = -1;
     let gameLevel = 1;
@@ -108,14 +125,17 @@
     function playRandomChord() {
       currentChordIndex = Math.floor(Math.random() * gameLevel);
       const currentChord = chords[currentChordIndex];
+      // currentChord.forEach(note => {
+      //   const source = context.createOscillator();
+      //   source.connect(masterGain);
+      //   source.type = 'triangle';
+      //   source.frequency.value = notes[note];
+      //   source.start(context.currentTime + 0.5);
+      //   source.stop(context.currentTime + 1.5); // 和音を1秒間再生
+      // });
       currentChord.forEach(note => {
-        const source = context.createOscillator();
-        source.connect(masterGain);
-        source.type = 'triangle';
-        source.frequency.value = notes[note];
-        source.start(context.currentTime + 0.5);
-        source.stop(context.currentTime + 1.5); // 和音を1秒間再生
-      });
+        piano.triggerAttackRelease(note, "1n");
+      })
     }
 
     function correct() {
@@ -155,7 +175,7 @@
       oscillator2.stop(context.currentTime + duration);
       oscillator3.stop(context.currentTime + duration);
       oscillator4.stop(context.currentTime + duration);
-      setTimeout(playRandomChord(), 1000);
+      setTimeout(playRandomChord, 1000);
     }
 
     function wrong() {
@@ -202,7 +222,9 @@
       document.getElementById("wrong-count").textContent = wrongCount;
     }
     
-    document.getElementById('start-button').addEventListener('click', () => {
+    document.getElementById('start-button').addEventListener('click', async () => {
+      await Tone.start();
+      await Tone.loaded();
       correctCount = 0;
       wrongCount = 0;
       updateScore();
