@@ -1,275 +1,228 @@
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="./style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>おとあてゲーム</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="./style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>おとあてゲーム</title>
+</head>
+
 <body>
-  <h1>おとあてゲーム</h1>
-  <p>おとをきいて、ボタンをおしてね</p>
-  レベル: <select id="button-number">
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-    <option value="7">7</option>
-    <option value="8">8</option>
-    <option value="9">9</option>
-    <option value="10">10</option>
-    <option value="11">11</option>
-    <option value="12">12</option>
-    <option value="13">13</option>
-    <option value="14">14</option>
-  </select>
-  <div>
-    <button id="start-button">はじめ / やりなおし</button>
-  </div>
-  <div id="stats">
-  せいかい: <span id="correct-count">0</span>　
-  ふせいかい: <span id="wrong-count">0</span></div>
-  <div id='color-button'>
-    <button id="red-button">ドミソ</button>
-    <button id="yellow-button">ドファラ</button>
-    <button id="blue-button">シレソ</button>
-    <button id="black-button">ラドファ</button>
-    <button id="green-button">レソシ</button>
-    <button id="orange-button">ミソド</button>
-    <button id="purple-button">ファラド</button>
-    <button id="pink-button">ソシレ</button>
-    <button id="brown-button">ソドミ</button>
-    <button id="light-green-button">ラチスミ</button>
-    <button id="light-orange-button">レフィスラ</button>
-    <button id="light-purple-button">ミギスシ</button>
-    <button id="gray-button">ベーレファ</button>
-    <button id="light-blue-button">エスソベー</button>
-  </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-  <script>
-    const context = new AudioContext();
-    const masterGain = context.createGain();
-    masterGain.connect(context.destination);
-    masterGain.gain.value = 0.2;
-    notes = {};
-    notes.A3 = 440.0 * Math.pow(2, -12 / 12);
-    notes.Be3 = 440.0 * Math.pow(2, -11 / 12);
-    notes.B3 = 440.0 * Math.pow(2, -10 / 12);
-    notes.C4 = 440.0 * Math.pow(2, -9 / 12);
-    notes.Cis4 = 440.0 * Math.pow(2, -8 / 12);
-    notes.D4 = 440.0 * Math.pow(2, -7 / 12);
-    notes.Es4 = 440.0 * Math.pow(2, -6 / 12);
-    notes.E4 = 440.0 * Math.pow(2, -5 / 12);
-    notes.F4 = 440.0 * Math.pow(2, -4 / 12);
-    notes.Fis4 = 440.0 * Math.pow(2, -3 / 12);
-    notes.G4 = 440.0 * Math.pow(2, -2 / 12);
-    notes.Gis4 = 440.0 * Math.pow(2, -1 / 12);
-    notes.A4 = 440.0 * Math.pow(2, 0 / 12);
-    notes.Be4 = 440.0 * Math.pow(2, 1 / 12);
-    notes.B4 = 440.0 * Math.pow(2, 2 / 12);
-    notes.C5 = 440.0 * Math.pow(2, 3 / 12);
-    notes.D5 = 440.0 * Math.pow(2, 5 / 12);
-    notes.E5 = 440.0 * Math.pow(2, 7 / 12);
+<h1>おとあてゲーム</h1>
+<p>おとをきいて、ボタンをおしてね</p>
 
-    const piano = new Tone.Sampler({
-      urls: {
-        "A3": "A3.mp3",
-        "C4": "C4.mp3",
-        "D#4": "Ds4.mp3",
-        "F#4": "Fs4.mp3",
-        "A4": "A4.mp3",
-        "C5": "C5.mp3",
-        "D#5": "Ds5.mp3"
-      },
-      baseUrl: "https://tonejs.github.io/audio/salamander/"
-    }).toDestination();
-    
-    const buttons = [
-      "red-button",
-      "yellow-button",
-      "blue-button",
-      "black-button",
-      "green-button",
-      "orange-button",
-      "purple-button",
-      "pink-button",
-      "brown-button",
-      "light-green-button",
-      "light-orange-button",
-      "light-purple-button",
-      "gray-button",
-      "light-blue-button"
-    ];
-    const chords = [
-      ['C4', 'E4', 'G4'],
-      ['C4', 'F4', 'A4'],
-      ['B3', 'D4', 'G4'],
-      ['A3', 'C4', 'F4'],
-      ['D4', 'G4', 'B4'],
-      ['E4', 'G4', 'C5'],
-      ['F4', 'A4', 'C5'],
-      ['G4', 'B4', 'D5'],
-      ['G4', 'C5', 'E5'],
-      ['A3', 'C#4', 'E4'],
-      ['D4', 'F#4', 'A4'],
-      ['E4', 'G#4', 'B4'],
-      ['A#3', 'D4', 'F4'],
-      ['D#4', 'G4', 'A#4']
-    ];
-    let currentChordIndex = -1;
-    let gameLevel = 1;
-    let correctCount = 0;
-    let wrongCount = 0;
+モード:
+<select id="mode-select">
+  <option value="training">トレーニング</option>
+  <option value="play">さいせい</option>
+</select>
 
-    function playRandomChord() {
-      currentChordIndex = Math.floor(Math.random() * gameLevel);
-      const currentChord = chords[currentChordIndex];
-      // currentChord.forEach(note => {
-      //   const source = context.createOscillator();
-      //   source.connect(masterGain);
-      //   source.type = 'triangle';
-      //   source.frequency.value = notes[note];
-      //   source.start(context.currentTime + 0.5);
-      //   source.stop(context.currentTime + 1.5); // 和音を1秒間再生
-      // });
-      currentChord.forEach(note => {
-        piano.triggerAttackRelease(note, "1n");
-      })
+レベル:
+<select id="button-number">
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6">6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+  <option value="11">11</option>
+  <option value="12">12</option>
+  <option value="13">13</option>
+  <option value="14">14</option>
+</select>
+
+<div>
+  <button id="start-button">はじめ / やりなおし</button>
+</div>
+
+<div id="stats">
+せいかい: <span id="correct-count">0</span>
+ふせいかい: <span id="wrong-count">0</span>
+</div>
+
+<div id='color-button'>
+  <button id="red-button">ドミソ</button>
+  <button id="yellow-button">ドファラ</button>
+  <button id="blue-button">シレソ</button>
+  <button id="black-button">ラドファ</button>
+  <button id="green-button">レソシ</button>
+  <button id="orange-button">ミソド</button>
+  <button id="purple-button">ファラド</button>
+  <button id="pink-button">ソシレ</button>
+  <button id="brown-button">ソドミ</button>
+  <button id="light-green-button">ラチスミ</button>
+  <button id="light-orange-button">レフィスラ</button>
+  <button id="light-purple-button">ミギスシ</button>
+  <button id="gray-button">ベーレファ</button>
+  <button id="light-blue-button">エスソベー</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script>
+const piano = new Tone.Sampler({
+  urls: {
+    "A3": "A3.mp3",
+    "C4": "C4.mp3",
+    "D#4": "Ds4.mp3",
+    "F#4": "Fs4.mp3",
+    "A4": "A4.mp3",
+    "C5": "C5.mp3",
+    "D#5": "Ds5.mp3"
+  },
+  baseUrl: "https://tonejs.github.io/audio/salamander/"
+}).toDestination();
+
+const buttons = [
+  "red-button","yellow-button","blue-button","black-button",
+  "green-button","orange-button","purple-button","pink-button",
+  "brown-button","light-green-button","light-orange-button",
+  "light-purple-button","gray-button","light-blue-button"
+];
+
+const chords = [
+  ['C4','E4','G4'],['C4','F4','A4'],['B3','D4','G4'],
+  ['A3','C4','F4'],['D4','G4','B4'],['E4','G4','C5'],
+  ['F4','A4','C5'],['G4','B4','D5'],['G4','C5','E5'],
+  ['A3','C#4','E4'],['D4','F#4','A4'],['E4','G#4','B4'],
+  ['A#3','D4','F4'],['D#4','G4','A#4']
+];
+
+let currentChordIndex = -1;
+let gameLevel = 1;
+let correctCount = 0;
+let wrongCount = 0;
+let mode = "training";
+let gameStarted = false;
+
+function playChord(index) {
+  chords[index].forEach(n => piano.triggerAttackRelease(n, "1n"));
+}
+
+function playRandomChord() {
+  currentChordIndex = Math.floor(Math.random() * gameLevel);
+  playChord(currentChordIndex);
+}
+
+function blinkCorrectButton(cycletime) {
+  const btn = document.getElementById(buttons[currentChordIndex]);
+  let count = 0;
+  const interval = setInterval(() => {
+    btn.style.opacity = (btn.style.opacity == "0.3") ? "1" : "0.3";
+    count++;
+    if (count > 6) {
+      clearInterval(interval);
+      btn.style.opacity = "1";
+    }
+  }, cycletime);
+}
+
+function correct() {
+  correctCount++;
+  updateScore();
+  blinkCorrectButton(100);
+  setTimeout(playRandomChord, 800);
+}
+
+function wrong() {
+  wrongCount++;
+  updateScore();
+  blinkCorrectButton(200);
+
+  setTimeout(playRandomChord, 1200);
+}
+
+function updateScore() {
+  document.getElementById("correct-count").textContent = correctCount;
+  document.getElementById("wrong-count").textContent = wrongCount;
+}
+
+document.getElementById('mode-select').addEventListener('change', (e) => {
+  mode = e.target.value;
+  gameStarted = false;
+
+  const stats = document.getElementById("stats");
+  const startBtn = document.getElementById("start-button");
+
+  if (mode === "play") {
+    stats.style.display = "none";
+    startBtn.style.display = "none";
+  } else {
+    stats.style.display = "block";
+    startBtn.style.display = "block";
+  }
+});
+
+document.getElementById('start-button').addEventListener('click', async () => {
+  await Tone.start();
+  await Tone.loaded();
+
+  correctCount = 0;
+  wrongCount = 0;
+  updateScore();
+
+  gameStarted = true;
+
+  if (mode === "training") {
+    playRandomChord();
+  }
+});
+
+for (let i = 0; i < buttons.length; i++) {
+  document.getElementById(buttons[i]).addEventListener('click', () => {
+
+    if (!gameStarted) return;
+
+    if (mode === "play") {
+      playChord(i);
+      return;
     }
 
-    function correct() {
-      correctCount++;
-      updateScore();
-      const context = new AudioContext();
-      // 音のパラメーターを定義する
-      const duration = 0.1; // 音の長さ（秒）
-      // OscillatorNodeを作成して設定する
-      const oscillator1 = context.createOscillator();
-      oscillator1.type = 'triangle'; // 波形は三角波
-      oscillator1.frequency.value = 740; // ファ＃の周波数
-      const oscillator2 = context.createOscillator();
-      oscillator2.type = 'triangle'; // 波形は三角波
-      oscillator2.frequency.value = 587; // レの周波数
-      const oscillator3 = context.createOscillator();
-      oscillator3.type = 'triangle'; // 波形は三角波
-      oscillator3.frequency.value = 1480; // ファ＃の周波数
-      const oscillator4 = context.createOscillator();
-      oscillator4.type = 'triangle'; // 波形は三角波
-      oscillator4.frequency.value = 1174; // レの周波数
-      // GainNodeを作成して設定する
-      const gainNode = context.createGain();
-      gainNode.gain.setValueAtTime(0.1, context.currentTime); // 音量を設定
-      // 接続する
-      oscillator1.connect(gainNode);
-      oscillator2.connect(gainNode);
-      oscillator3.connect(gainNode);
-      oscillator4.connect(gainNode);
-      gainNode.connect(context.destination);
-      // 音を鳴らす
-      oscillator1.start();
-      oscillator3.start();
-      oscillator2.start(context.currentTime + duration / 2);
-      oscillator4.start(context.currentTime + duration / 2);
-      oscillator1.stop(context.currentTime + duration);
-      oscillator2.stop(context.currentTime + duration);
-      oscillator3.stop(context.currentTime + duration);
-      oscillator4.stop(context.currentTime + duration);
-      setTimeout(playRandomChord, 1000);
+    if (currentChordIndex == i) {
+      correct();
+    } else {
+      wrong();
     }
+  });
+}
 
-    function wrong() {
-      wrongCount++;
-      updateScore();
-      const context = new AudioContext();
-      // 音のパラメーターを定義する
-      const duration = 0.1; // 音の長さ（秒）
-      // OscillatorNodeを作成して設定する
-      const oscillator1 = context.createOscillator();
-      oscillator1.type = 'sawtooth'; // 波形は三角波
-      oscillator1.frequency.value = 80;
-      const oscillator2 = context.createOscillator();
-      oscillator2.type = 'sawtooth'; // 波形は三角波
-      oscillator2.frequency.value = 80; //
-      const oscillator3 = context.createOscillator();
-      oscillator3.type = 'sawtooth'; // 波形は三角波
-      oscillator3.frequency.value = 85; // 
-      const oscillator4 = context.createOscillator();
-      oscillator4.type = 'sawtooth'; // 波形は三角波
-      oscillator4.frequency.value = 85; // 
-      // GainNodeを作成して設定する
-      const gainNode = context.createGain();
-      gainNode.gain.setValueAtTime(0.1, context.currentTime); // 音量を設定
-      // 接続する
-      oscillator1.connect(gainNode);
-      oscillator2.connect(gainNode);
-      oscillator3.connect(gainNode);
-      oscillator4.connect(gainNode);
-      gainNode.connect(context.destination);
-      // 音を鳴らす
-      oscillator1.start();
-      oscillator3.start();
-      oscillator2.start(context.currentTime + 2 * duration);
-      oscillator4.start(context.currentTime + 2 * duration);
-      oscillator1.stop(context.currentTime + duration);
-      oscillator2.stop(context.currentTime + 4 * duration);
-      oscillator3.stop(context.currentTime + duration);
-      oscillator4.stop(context.currentTime + 4 * duration);
-    }
+document.getElementById('button-number').addEventListener('change', () => {
+  const value = document.getElementById('button-number').value;
+  gameLevel = value;
+  gameStarted = false;
 
-    function updateScore() {
-      document.getElementById("correct-count").textContent = correctCount;
-      document.getElementById("wrong-count").textContent = wrongCount;
-    }
-    
-    document.getElementById('start-button').addEventListener('click', async () => {
-      await Tone.start();
-      await Tone.loaded();
-      correctCount = 0;
-      wrongCount = 0;
-      updateScore();
-      playRandomChord();
-    });
-    
-    for (let i = 0; i < buttons.length; i++) {
-      document.getElementById(buttons[i]).
-      addEventListener('click', () => {
-        if (currentChordIndex == i) {
-          correct();
-        } else {
-          wrong();
-        }
-      });
-    }
-    
-    document.getElementById('button-number').addEventListener('change', () => {
-      const value = document.getElementById('button-number').value;
-      gameLevel = value;
-      const chil = document.getElementById('color-button').childNodes;
-      let but = 0;
-      for (let i = 0; i < chil.length; i++) {
-        if (chil[i].tagName == 'BUTTON') {
-          but++;
-          chil[i].removeAttribute("hidden");
-          if (but > value) {
-            chil[i].setAttribute("hidden", "hidden");
-          }
-        }
+  const chil = document.getElementById('color-button').childNodes;
+  let but = 0;
+  for (let i = 0; i < chil.length; i++) {
+    if (chil[i].tagName == 'BUTTON') {
+      but++;
+      chil[i].removeAttribute("hidden");
+      if (but > value) {
+        chil[i].setAttribute("hidden", "hidden");
       }
-    });
-    document.addEventListener("DOMContentLoaded", () => {
-      const chil = document.getElementById('color-button').childNodes;
-      let but = 0;
-      for (let i = 0; i < chil.length; i++) {
-        if (chil[i].tagName === 'BUTTON') {
-          but++;
-          if (but > 1) {
-            chil[i].setAttribute("hidden", "hidden");
-          }
-        }
+    }
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const chil = document.getElementById('color-button').childNodes;
+  let but = 0;
+  for (let i = 0; i < chil.length; i++) {
+    if (chil[i].tagName === 'BUTTON') {
+      but++;
+      if (but > 1) {
+        chil[i].setAttribute("hidden", "hidden");
       }
-    });
-  </script>
+    }
+  }
+  const modeInit = document.getElementById('mode-select').value;
+  if (modeInit === "play") {
+    document.getElementById("stats").style.display = "none";
+    document.getElementById("start-button").style.display = "none";
+  }
+});
+</script>
 </body>
-
 </html>
