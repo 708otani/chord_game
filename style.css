@@ -1,3 +1,21 @@
+select {
+  font-size: 18px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: all 0.1s ease;
+}
+
+label, select {
+  margin: 6px;
+}
+
+select:active {
+  transform: scale(0.98);
+}
+
 button {
   border-radius: 50%;
   width: 100px;
@@ -8,24 +26,15 @@ button {
   position: relative;
   cursor: pointer;
 
-  box-shadow:
-    0 10px 2px var(--side-color);
-
   transition: all 0.1s ease;
 }
 
 button:hover {
   transform: translateY(-3px);
-
-  box-shadow:
-    0 12px 2px var(--side-color);
 }
 
 button:active {
   transform: translateY(4px);
-
-  box-shadow:
-    0 4px 2px var(--side-color);
 }
 
 #color-button-div {
@@ -41,85 +50,71 @@ button:active {
 #red-button {
   background-color: red;
   color: white;
-  --side-color: #990000;
 }
 
 #yellow-button {
   background-color: yellow;
   color: black;
-  --side-color: #bfbf00;
 }
 
 #blue-button {
   background-color: blue;
   color: white;
-  --side-color: #000099;
 }
 
 #black-button {
   background-color: black;
   color: white;
-  --side-color: #222222;
 }
 
 #green-button {
   background-color: green;
   color: white;
-  --side-color: #006600;
 }
 
 #orange-button {
   background-color: #ff9900;
   color: white;
-  --side-color: #cc7a00;
 }
 
 #purple-button {
   background-color: #990099;
   color: white;
-  --side-color: #660066;
 }
 
 #pink-button {
   background-color: #ff6699;
   color: white;
-  --side-color: #cc3366;
 }
 
 #brown-button {
   background-color: #990000;
   color: white;
-  --side-color: #660000;
 }
 
 #light-green-button {
   background-color: lime;
   color: black;
-  --side-color: #00cc00;
 }
 
 #light-orange-button {
   background-color: #ffcccc;
   color: black;
-  --side-color: #cc9999;
 }
 
 #light-purple-button {
   background-color: #cc66cc;
   color: black;
-  --side-color: #993399;
 }
 
 #gray-button {
   background-color: #999999;
   color: black;
-  --side-color: #666666;
 }
 
 #light-blue-button {
   background-color: #00ccff;
   color: black;
-  --side-color: #0099cc;
 }
 
 #start-button-div {
