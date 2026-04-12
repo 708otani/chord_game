@@ -34,7 +34,7 @@
   <option value="14">14</option>
 </select>
 
-<div>
+<div id="start-button-div">
   <button id="start-button">はじめ / やりなおし</button>
 </div>
 
@@ -43,21 +43,21 @@
 ふせいかい: <span id="wrong-count">0</span>
 </div>
 
-<div id='color-button'>
-  <button id="red-button">ドミソ</button>
-  <button id="yellow-button">ドファラ</button>
-  <button id="blue-button">シレソ</button>
-  <button id="black-button">ラドファ</button>
-  <button id="green-button">レソシ</button>
-  <button id="orange-button">ミソド</button>
-  <button id="purple-button">ファラド</button>
-  <button id="pink-button">ソシレ</button>
-  <button id="brown-button">ソドミ</button>
-  <button id="light-green-button">ラチスミ</button>
-  <button id="light-orange-button">レフィスラ</button>
-  <button id="light-purple-button">ミギスシ</button>
-  <button id="gray-button">ベーレファ</button>
-  <button id="light-blue-button">エスソベー</button>
+<div id='color-button-div'>
+  <button id="red-button">ドミソ<br>C</button>
+  <button id="yellow-button">ドファラ<br> </button>
+  <button id="blue-button">シレソ<br> </button>
+  <button id="black-button">ラドファ<br> </button>
+  <button id="green-button">レソシ<br> </button>
+  <button id="orange-button">ミソド<br> </button>
+  <button id="purple-button">ファラド<br>F</button>
+  <button id="pink-button">ソシレ<br>G</button>
+  <button id="brown-button">ソドミ<br> </button>
+  <button id="light-green-button">ラチスミ<br>A</button>
+  <button id="light-orange-button">レフィスラ<br>D</button>
+  <button id="light-purple-button">ミギスシ<br>E</button>
+  <button id="gray-button">ベーレファ<br>B♭</button>
+  <button id="light-blue-button">エスソベー<br>E♭</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -139,7 +139,7 @@ function updateScore() {
   document.getElementById("wrong-count").textContent = wrongCount;
 }
 
-document.getElementById('mode-select').addEventListener('change', (e) => {
+document.getElementById('mode-select').addEventListener('change', async (e) => {
   mode = e.target.value;
   gameStarted = false;
 
@@ -173,12 +173,12 @@ document.getElementById('start-button').addEventListener('click', async () => {
 for (let i = 0; i < buttons.length; i++) {
   document.getElementById(buttons[i]).addEventListener('click', () => {
 
-    if (!gameStarted) return;
-
     if (mode === "play") {
       playChord(i);
       return;
     }
+
+    if (!gameStarted) return;
 
     if (currentChordIndex == i) {
       correct();
@@ -193,7 +193,7 @@ document.getElementById('button-number').addEventListener('change', () => {
   gameLevel = value;
   gameStarted = false;
 
-  const chil = document.getElementById('color-button').childNodes;
+  const chil = document.getElementById('color-button-div').childNodes;
   let but = 0;
   for (let i = 0; i < chil.length; i++) {
     if (chil[i].tagName == 'BUTTON') {
@@ -207,7 +207,7 @@ document.getElementById('button-number').addEventListener('change', () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const chil = document.getElementById('color-button').childNodes;
+  const chil = document.getElementById('color-button-div').childNodes;
   let but = 0;
   for (let i = 0; i < chil.length; i++) {
     if (chil[i].tagName === 'BUTTON') {
